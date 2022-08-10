@@ -45,11 +45,10 @@ void getNewVoltage() {
         #ifndef TENSION_MOCK
             eMon.calcVI(EMON_CROSSINGS, EMON_TIMEOUT);
             newVoltage = eMon.Vrms;
-            voltages[index] = newVoltage;
         #else
             newVoltage = TENSION_MOCK + random(300) / 100.0;
-            voltages[index] = newVoltage;
         #endif
+        voltages[index] = newVoltage;
         #if DEBUG_LEVEL >= 3
             Serial.print("Nueva tension: ");
             Serial.println(newVoltage);
@@ -68,10 +67,10 @@ void getNewTemperature() {
         #ifndef TEMPERATURA_MOCK
             sensorDS18B20.requestTemperatures();
             newTemperature = sensorDS18B20.getTempCByIndex(0);
-            temperatures[index] = newTemperature;
         #else
-            temperatures[index] = TEMPERATURA_MOCK + random(300) / 100.0;
+            newTemperature = TEMPERATURA_MOCK + random(300) / 100.0;
         #endif
+        temperatures[index] = newTemperature;
     }
     #if DEBUG_LEVEL >= 3
         Serial.print("Nueva temperatura: ");
@@ -79,7 +78,6 @@ void getNewTemperature() {
     #endif
     refreshRequested[1] = false;
 }
-
 /**
     callbackPresencia() se encarga de pollear el estado del pin del sensor de presencia,
     en base al estado del flag presenciaLast.
