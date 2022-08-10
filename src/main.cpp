@@ -64,6 +64,12 @@ bool dayTime = true;
 bool doorOpen = false;
 
 /**
+    emergency es un flag que se pone en true o en false en base al estado del 
+    botón antipánico. Si emergency es true, significa que el botón ha sido presionado.
+*/
+bool emergency = false;
+
+/**
     refreshRequested contiene SENSORS_QTY variables booleanas que representan la necesidad
     de refrescar los valores de los arrays de medición. Estos tienen un orden arbitrario:
     { Tensión, Temperatura }
@@ -112,6 +118,14 @@ const String knownCommands[KNOWN_COMMANDS_SIZE] = {
     "nighttime"    // alerta a la cabina que es de noche.
 };
 
+/**
+    statusOutgoing es una string que puede tomar uno de los siguientes valores:
+    - 'S': cabina en servicio.
+    - 'L': cabina en modo limitado.
+    - 'F': cabina fuera de servicio.
+*/
+String statusOutgoing = "";
+
 /// Headers finales (proceden a la declaración de variables).
 
 #include "pinout.h"             // Biblioteca propia.
@@ -158,7 +172,7 @@ void loop() {
         stopRefreshingAllSensors();
 
         // Compone la carga útil de LoRa.
-        composeLoRaPayload(voltages, temperatures, outcomingFull);
+        composeLoRaPayload(voltages, temperatures, statusOutgoing, outcomingFull);
 
         #if DEBUG_LEVEL >= 1
             Serial.print("Payload LoRa encolado!: ");
@@ -188,11 +202,14 @@ void loop() {
     callbackAlert();
     callbackLoRaCommand();
     callbackPuerta();
+    callbackEmergency();
 
     if(runEvery(sec2ms(TIMEOUT_READ_SENSORS), 2)) {
         // Refresca TODOS los sensores.
         refreshAllSensors();
+        // Actualiza el estado de las luces.
         callbackLights();
+        // Avanza en 1 a los índices de los arrays de medición.
         index++;
     }
 
@@ -205,5 +222,17 @@ void loop() {
             // Obtiene un nuevo valor de temperatura.
             getNewTemperature();
         }
+    }
+
+    // Si no se presionó el botón antipánico...
+    if (!emergency) {
+        // ToDo: consultar el estado de la cabina por USB.
+        statusOutgoing = "S";
+    } else {
+        // cambia el estado de la cabina.
+        statusOutgoing = "F";
+        // iniciar alarma de emergencia.
+        startAlert(100, 10);
+        // ToDo: cambiar el estado de la cabina por USB.
     }
 }

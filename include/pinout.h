@@ -58,6 +58,7 @@ RS232 (2) - | [ ]A7              INT0/D2[ ] | - Reservado para RA-02.
 // #define TEMPERATURA_PIN 8
 #define RELE_PIN 7
 #define PUERTA_PIN 6
+#define ANTIPANICO_PIN 5
 
 // Definición de modo de trabajo.
 #define BUZZER_ACTIVO HIGH
@@ -89,6 +90,9 @@ void setupPinout() {
     #endif
     #ifdef PUERTA_PIN
         pinMode(PUERTA_PIN, INPUT);
+    #endif
+    #ifdef ANTIPANICO_PIN
+        pinMode(ANTIPANICO_PIN, INPUT);
     #endif
 
     digitalWrite(BUZZER_PIN, BUZZER_INACTIVO);

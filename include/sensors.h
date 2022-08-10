@@ -80,16 +80,32 @@ void getNewTemperature() {
 }
 
 /**
+    callbackEmergency() se encarga de pollear el estado del pin del botón antipánico,
+    almacenando el valor en emergency
+*/
+void callbackEmergency() {
+    #ifndef ANTIPANICO_MOCK
+        if (digitalRead(ANTIPANICO_PIN) == ANTIPANICO_ACTIVO) {
+            emergency = true;
+        } else {
+            emergency = false;
+        }
+    #else
+        emergency = ANTIPANICO_MOCK;
+    #endif
+}
+
+/**
     callbackPuerta() se encarga de pollear el estado del pin del sensor de puerta,
     almacenando el valor en doorOpen.
 */
 void callbackPuerta() {
     #ifndef PUERTA_MOCK
-        #if PUERTA_ACTIVA == HIGH
-            doorOpen = digitalRead(PUERTA_PIN);
-        #else
-            doorOpen = !digitalRead(PUERTA_PIN);
-        #endif
+        if (digitalRead(PUERTA_PIN) == PUERTA_ACTIVA) {
+            doorOpen = true;
+        } else {
+            doorOpen = false;
+        }
     #else
         doorOpen = PUERTA_MOCK;
     #endif

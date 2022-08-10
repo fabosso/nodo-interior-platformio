@@ -106,17 +106,23 @@ void reserveMemory() {
         DEVICE_ID = 10009
         volts = {220.00, 230.00}
         temps = {24.00, 25.00}
+        status = "S"
     Entonces, esta función sobreescribe la String a retornar con:
-        "<10009>voltage=225.00&temperature=24.50"
+        "<10009>voltage=225.00&temperature=24.50&status=S"
     @param volts Array con los valores de medición de tensión.
     @param temps Array con los valores de medición de temperatura.
+    @param status Estado de la cabina.
     @param &rtn Dirección de memoria de la String a componer.
 */
-void composeLoRaPayload(float volts[], float temps[], String& rtn) {
+void composeLoRaPayload(float volts[], float temps[], String status, String& rtn) {
     // Payload LoRA = vector de bytes transmitidos en forma FIFO.
-    // | Dev ID | Tensión | Temperatura |
+    // | Dev ID | Tensión | Temperatura | Status |
     rtn = "<";
-    rtn += DEVICE_ID;
+    #ifdef DEVICE_ID
+        rtn += ((int)DEVICE_ID);
+    #else
+        rtn += "***";
+    #endif
     rtn += ">";
 
     rtn += "voltage";
@@ -127,4 +133,9 @@ void composeLoRaPayload(float volts[], float temps[], String& rtn) {
     rtn += "temperature";
     rtn += "=";
     rtn += compressArray(temps, ARRAY_SIZE);
+
+    rtn += "&";
+    rtn += "status";
+    rtn += "=";
+    rtn += status;
 }
