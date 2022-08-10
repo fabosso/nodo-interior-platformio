@@ -59,19 +59,18 @@ void callbackLoRaCommand() {
 }
 
 /**
-    callbackLights() se encarga de chequear el estado de dos flags: dayTime y presenciaChanged.
+    callbackLights() se encarga de chequear el estado de dos flags: dayTime y doorOpen.
     Si es de día, saltea el resto de la función (porque el relé estará siempre en modo activo).
-    Si hubo un cambio en el sensor de presencia, togglea el estado del relé y baja el flag.
+    Si es de noche y la puerta está abierta, desactiva el relé. Si no, lo activa.
 */
 void callbackLights() {
     if (dayTime) {
         digitalWrite(RELE_PIN, RELE_ACTIVO);
-        return;
-    }
-
-    if (presenciaDetected) {
-        digitalWrite(RELE_PIN, RELE_ACTIVO);
     } else {
-        digitalWrite(RELE_PIN, RELE_INACTIVO);
+        if (doorOpen) {
+            digitalWrite(RELE_PIN, RELE_INACTIVO);
+        } else {
+            digitalWrite(RELE_PIN, RELE_ACTIVO);
+        }
     }
 }

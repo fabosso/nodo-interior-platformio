@@ -28,12 +28,16 @@
 #define ARRAY_SIZE (LORA_TIMEOUT / TIMEOUT_READ_SENSORS + 3)
 #define TIMING_SLOTS 4 				// Cantidad de slots necesarios de timing (ver timing_helpers.h)
 
-// Sensores.
+// Sensor de corriente.
 #define EMON_CROSSINGS 20           // Cantidad de semi-ondas muestreadas para medir tensión y/o corriente.
 #define EMON_TIMEOUT 1000           // Timeout de la rutina calcVI (en ms).
-#define PING_SAMPLES 5              // Cantidad de muestras ultrasónicos.
-#define MAX_DISTANCE 50             // Distancia a la pared.
+
+// Sensor de puerta abierta.
+#define PUERTA_ACTIVA HIGH          // Señal entrante cuando la puerta está abierta
+#define PUERTA_INACTIVA LOW         // Señal entrante cuando la puerta está cerrada
 
 /// Valores mock.
 // #define TENSION_MOCK 223.11      // Tensión de prueba.
-#define TEMPERATURA_MOCK 23.11   // Temperatura de prueba.
+#define TEMPERATURA_MOCK 23.11      // Temperatura de prueba.
+#define ANTIPANICO_MOCK 0           // Antipánico de prueba.
+#define PUERTA_MOCK 0               // Puerta de prueba.

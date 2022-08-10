@@ -57,8 +57,7 @@ RS232 (2) - | [ ]A7              INT0/D2[ ] | - Reservado para RA-02.
 #define BUZZER_PIN 9
 // #define TEMPERATURA_PIN 8
 #define RELE_PIN 7
-#define PRESENCIA_ECHO_PIN 6    // A través de cable USB
-#define PRESENCIA_TRIG_PIN 5    // A través de cable USB
+#define PUERTA_PIN 6
 
 // Definición de modo de trabajo.
 #define BUZZER_ACTIVO HIGH
@@ -74,8 +73,6 @@ EnergyMonitor eMon;
     DallasTemperature sensorDS18B20(&oneWireObjeto);
 #endif
 
-NewPing sonar(PRESENCIA_TRIG_PIN, PRESENCIA_ECHO_PIN, MAX_DISTANCE);
-
 /**
     setupPinout() determina las I/Os digitales, inicializa al DS18B20
     y calibra el módulo sensor de tensión.
@@ -90,11 +87,8 @@ void setupPinout() {
     #ifdef RELE_PIN
         pinMode(RELE_PIN, OUTPUT);
     #endif
-    #ifdef PRESENCIA_TRIG_PIN
-        pinMode(PRESENCIA_TRIG_PIN, OUTPUT);
-    #endif
-    #ifdef PRESENCIA_ECHO_PIN
-        pinMode(PRESENCIA_ECHO_PIN, INPUT);
+    #ifdef PUERTA_PIN
+        pinMode(PUERTA_PIN, INPUT);
     #endif
 
     digitalWrite(BUZZER_PIN, BUZZER_INACTIVO);

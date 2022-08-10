@@ -78,16 +78,19 @@ void getNewTemperature() {
     #endif
     refreshRequested[1] = false;
 }
+
 /**
-    callbackPresencia() se encarga de pollear el estado del pin del sensor de presencia,
-    en base al estado del flag presenciaLast.
-    Cuando detecta un cambio de estado del sensor de presencia, pone en true el flag presenciaChanged.
+    callbackPuerta() se encarga de pollear el estado del pin del sensor de puerta,
+    almacenando el valor en doorOpen.
 */
-void callbackPresencia() {
-    float dist = 0.0;
-    dist = sonar.ping_median(PING_SAMPLES);
-    dist = sonar.convert_cm(dist);
-    if (dist < MAX_DISTANCE) {
-        presenciaDetected = true;
-    }
+void callbackPuerta() {
+    #ifndef PUERTA_MOCK
+        #if PUERTA_ACTIVA == HIGH
+            doorOpen = digitalRead(PUERTA_PIN);
+        #else
+            doorOpen = !digitalRead(PUERTA_PIN);
+        #endif
+    #else
+        doorOpen = PUERTA_MOCK;
+    #endif
 }

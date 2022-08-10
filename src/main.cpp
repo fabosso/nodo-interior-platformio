@@ -16,9 +16,6 @@
 #include <SPI.h>                // https://www.arduino.cc/en/reference/SPI
 #include <LoRa.h>               // https://github.com/sandeepmistry/arduino-LoRa
 
-// Biblioteca utilizada para manejar al HC-SR04.
-#include <NewPing.h>            // https://bitbucket.org/teckel12/arduino-new-ping/wiki/Home
-
 // Bibliotecas necesarias para manejar al DS18B20.
 #include <OneWire.h>            // https://www.pjrc.com/teensy/td_libs_OneWire.html
 #include <DallasTemperature.h>  // https://www.milesburton.com/Dallas_Temperature_Control_Library
@@ -61,12 +58,10 @@ int index = 0;
 bool dayTime = true;
 
 /**
-    presenciaDetected es un flag que se pone en true o false dependiendo
-    del cambio de estado del sensor de presencia.
+    doorOpen es un flag que se pone en true o en false en base al estado de la puerta.
+    Si doorOpen es true, significa que la puerta está abierta.
 */
-bool presenciaDetected = false;
-
-bool releChanged = false;
+bool doorOpen = false;
 
 /**
     refreshRequested contiene SENSORS_QTY variables booleanas que representan la necesidad
@@ -192,7 +187,7 @@ void loop() {
 
     callbackAlert();
     callbackLoRaCommand();
-    callbackPresencia();
+    callbackPuerta();
 
     if(runEvery(sec2ms(TIMEOUT_READ_SENSORS), 2)) {
         // Refresca TODOS los sensores.
