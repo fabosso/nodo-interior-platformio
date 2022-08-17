@@ -13,6 +13,7 @@
 /// LoRa.
 #define LORA_FREQ 433175000                                                         // Frecuencia de la transmisión LoRa (en Hz).
 #define DEVICE_ID 10009                                                             // Identificador de este nodo.
+#define EXTERIOR_ID (DEVICE_ID + 10000)                                             // Identificador del nodo exterior.
 #define BROADCAST_ID (DEVICE_ID - DEVICE_ID % 10000 + 9999)                         // ID broadcast para este tipo de nodo.
 #define DEVICE_ID_MAX_SIZE 6                                                        // Tamaño máximo que se espera para cada DEVICE_ID entrante.
 #define INCOMING_PAYLOAD_MAX_SIZE 50                                                // Tamaño máximo esperado del payload LoRa entrante.

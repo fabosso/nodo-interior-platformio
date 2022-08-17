@@ -45,6 +45,19 @@ float voltages[ARRAY_SIZE] = {0.0};
 float temperatures[ARRAY_SIZE] = {0.0};
 
 /**
+    currentBuffer es un float que contiene el último valor de corriente reportado por el
+    nodo exterior emparejado a este nodo.
+*/
+float currentBuffer = 0.0;
+
+
+/**
+    gasBuffer es un float que contiene el último valor de nivel de combustible reportado por el
+    nodo exterior emparejado a este nodo.
+*/
+float gasBuffer = 0.0;
+
+/**
     index es una variable de tipo int utilizado para recorrer los arrays de medición.
     Una vez realizada la transmisión, vuelve a ponerse en 0.
 */
@@ -90,13 +103,6 @@ String outcomingFull;
 String incomingFull;
 
 /**
-    greaterThanStr (>) es el delimitador entre el identificador de nodo y la carga útil
-    del mensaje de entrada LoRa. Se carga en memoria una única vez en una String constante
-    para evitar problemas de memoria heap.
-*/
-const String greaterThanStr = ">";
-
-/**
     receiverStr es una string que sólo contiene el identificador de nodo
     recibido en un mensaje LoRa entrante.
 */
@@ -126,6 +132,52 @@ const String knownCommands[KNOWN_COMMANDS_SIZE] = {
 */
 String statusOutgoing = "";
 
+/**
+    currentStr es una string que contiene el valor de corriente actual, antes de parsearlo a float.
+*/
+String currentStr = "";
+
+/**
+    gasStr es una string que contiene el valor de nivel de combustible actual, antes de parsearlo a float.
+*/
+String gasStr = "";
+
+/**
+    equalSign es el caracter "=" almacenado en una constante.
+*/
+const String equalSign = "=";
+
+/**
+    slashSign es el caracter "/" almacenado en una constante.
+*/
+const String slashSign = "/";
+
+/**
+    ampersandSign es el caracter "&" almacenado en una constante.
+*/
+const String ampersandSign = "&";
+
+/**
+    greaterSign es el caracter ">" almacenado en una constante.
+*/
+const String greaterSign = ">";
+
+/**
+    equalsPosition es un int que contiene la posición de la cadena '=' en una cadena de texto.
+*/
+int equalsPosition = 0;
+
+/**
+    slashPosition es un int que contiene la posición de la cadena '/' en una cadena de texto.
+*/
+int slashPosition = 0;
+
+/**
+    ampersandPosition es un int que contiene la posición de la cadena '&' en una cadena de texto.
+*/
+int ampersandPosition = 0;
+
+
 /// Headers finales (proceden a la declaración de variables).
 
 #include "pinout.h"             // Biblioteca propia.
@@ -138,6 +190,27 @@ String statusOutgoing = "";
 #include "LoRa_helpers.h"       // Biblioteca propia.
 
 /// Funciones principales.
+
+/**
+    reserveMemory() reserva memoria para las Strings.
+    En caso de quedarse sin memoria, alerta por puerto serial
+    e inicia una alerta de falla
+*/
+void reserveMemory() {
+    receiverStr.reserve(DEVICE_ID_MAX_SIZE);
+    incomingPayload.reserve(INCOMING_PAYLOAD_MAX_SIZE);
+    incomingFull.reserve(INCOMING_FULL_MAX_SIZE);
+    currentStr.reserve(8);
+    gasStr.reserve(8);
+
+    if (!outcomingFull.reserve(MAX_SIZE_OUTCOMING_LORA_REPORT)) {
+        #if DEBUG_LEVEL >= 1
+            Serial.println("Strings out of memory!");
+        #endif
+        blockingAlert(133, 50);
+        while (1);
+    }
+}
 
 /**
     setup() lleva a cabo las siguientes tareas:

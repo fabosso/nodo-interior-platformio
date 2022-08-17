@@ -29,7 +29,7 @@ void onReceive(int packetSize) {
     }
 
     // Extraer el delimitador ">" para diferenciar el ID del payload.
-    int delimiter = incomingFull.indexOf(greaterThanStr);
+    int delimiter = incomingFull.indexOf(greaterSign);
 
     // Obtener el ID de receptor.
     receiverStr = incomingFull.substring(1, delimiter);
@@ -45,6 +45,25 @@ void onReceive(int packetSize) {
         incomingPayload = incomingFull.substring(delimiter + 1);
         #if DEBUG_LEVEL >= 1
             Serial.println("ID coincide!");
+        #endif
+    } else if (receiverID == EXTERIOR_ID) {
+        // incomingFull típico del nodo exterior:
+        // <20009>current=0.65&raindrops=1&gas=123.51/150&lat=-34.57475&lng=58.43552&alt=15
+        equalsPosition = incomingFull.indexOf(equalSign);
+        ampersandPosition = incomingFull.indexOf(ampersandSign);
+        if (equalsPosition != -1 && ampersandPosition != -1) {
+            currentStr = incomingFull.substring(equalsPosition + 1, ampersandPosition);
+            currentBuffer = currentStr.toFloat();
+        }
+        ampersandPosition = incomingFull.indexOf(ampersandSign, ampersandPosition + 1);
+        equalsPosition = incomingFull.indexOf(equalSign, ampersandPosition);
+        slashPosition = incomingFull.indexOf(slashSign, equalsPosition);
+        if (equalsPosition != -1 && slashPosition != -1) {
+            gasStr = incomingFull.substring(equalsPosition + 1, slashPosition);
+            gasBuffer = gasStr.toFloat();
+        }
+        #if DEBUG_LEVEL >= 1
+            Serial.println("Nodo exterior!");
         #endif
     } else {
         #if DEBUG_LEVEL >= 2
@@ -78,25 +97,6 @@ void LoRaInitialize() {
     #if DEBUG_LEVEL >= 1
         Serial.println("LoRa initialized OK.");
     #endif
-}
-
-/**
-    reserveMemory() reserva memoria para las Strings.
-    En caso de quedarse sin memoria, alerta por puerto serial
-    e inicia una alerta de falla
-*/
-void reserveMemory() {
-    receiverStr.reserve(DEVICE_ID_MAX_SIZE);
-    incomingPayload.reserve(INCOMING_PAYLOAD_MAX_SIZE);
-    incomingFull.reserve(INCOMING_FULL_MAX_SIZE);
-
-    if (!outcomingFull.reserve(MAX_SIZE_OUTCOMING_LORA_REPORT)) {
-        #if DEBUG_LEVEL >= 1
-            Serial.println("Strings out of memory!");
-        #endif
-        blockingAlert(133, 50);
-        while (1);
-    }
 }
 
 /**
