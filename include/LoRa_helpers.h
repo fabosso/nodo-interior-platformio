@@ -76,6 +76,20 @@ void onReceive(int packetSize) {
     receiverStr = "";
 }
 
+/*
+    serialEvent() ocurre cada vez que se recibe un dato por el puerto serie.
+    Al recibir el caracter newline, se levanta un flag.
+*/
+void serialEvent() {
+  while (Serial.available()) {
+    char inChar = (char)Serial.read();
+    incomingUSB += inChar;
+    if (inChar == '\n') {
+        incomingUSBComplete = true;
+    }
+  }
+}
+
 /**
     LoRaInitialize() inicializa el módulo SX1278 con:
         - la frecuencia y la palabra de sincronización indicados en constants.h

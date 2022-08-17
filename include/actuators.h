@@ -74,3 +74,18 @@ void callbackLights() {
         }
     }
 }
+
+/**
+    callbackStatus() se encarga de parsear solo el caracter útil de la string de entrada
+    del USB, y almacenar en statusOutcoming el estado actual de la cabina reportada
+    por el proyecto SIGEFA.
+*/
+void callbackStatus() {
+    if (incomingUSBComplete) {
+        // incomingUSB típico:
+        // USB: status=S
+        equalsPosition = incomingUSB.indexOf(equalSign);
+        statusOutcoming = incomingUSB.substring(equalsPosition + 1, equalsPosition + 2);
+        incomingUSBComplete = false;
+    }
+}

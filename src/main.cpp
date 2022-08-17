@@ -130,7 +130,7 @@ const String knownCommands[KNOWN_COMMANDS_SIZE] = {
     - 'L': cabina en modo limitado.
     - 'F': cabina fuera de servicio.
 */
-String statusOutgoing = "";
+String statusOutcoming = "";
 
 /**
     currentStr es una string que contiene el valor de corriente actual, antes de parsearlo a float.
@@ -178,9 +178,20 @@ int slashPosition = 0;
 int ampersandPosition = 0;
 
 /**
-    outcomingUSB es una string que contiene el mensaje USB de salida.
+    outcomingUSB es una string que contiene el mensaje USB de salida hacia el proyecto SIGEFA.
 */
 String outcomingUSB = "";
+
+/**
+    incomingUSB es una string que contiene el mensaje USB de entrada desde el proyecto SIGEFA.
+*/
+String incomingUSB = "";
+
+/**
+    incomingUSBComplete es un flag que se pone en true cuando 
+    se recibe un '\n' en el mensaje USB de entrada.
+*/
+bool incomingUSBComplete = false;
 
 
 /// Headers finales (proceden a la declaración de variables).
@@ -205,6 +216,7 @@ void reserveMemory() {
     receiverStr.reserve(DEVICE_ID_MAX_SIZE);
     currentStr.reserve(8);
     gasStr.reserve(8);
+    incomingUSB.reserve(20);
     incomingPayload.reserve(INCOMING_PAYLOAD_MAX_SIZE);
     incomingFull.reserve(INCOMING_FULL_MAX_SIZE);
     outcomingUSB.reserve(100);
@@ -252,7 +264,7 @@ void loop() {
         stopRefreshingAllSensors();
 
         // Compone la carga útil de LoRa.
-        composeLoRaPayload(voltages, temperatures, statusOutgoing, outcomingFull);
+        composeLoRaPayload(voltages, temperatures, statusOutcoming, outcomingFull);
 
         #if DEBUG_LEVEL >= 1
             Serial.print("Payload LoRa encolado!: ");
@@ -283,6 +295,7 @@ void loop() {
     callbackLoRaCommand();
     callbackPuerta();
     callbackEmergency();
+    callbackStatus();
 
     if(runEvery(sec2ms(TIMEOUT_READ_SENSORS), 2)) {
         // Refresca TODOS los sensores.
