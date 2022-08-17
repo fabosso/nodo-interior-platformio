@@ -139,3 +139,28 @@ void composeLoRaPayload(float volts[], float temps[], String status, String& rtn
     rtn += "=";
     rtn += status;
 }
+
+void composeUSBPayload(float volts[], float temps[], bool emergency, float current, float gas, String& rtn) {
+    // Payload USB = vector de bytes transmitidos en forma FIFO.
+    // | Tensión | Temperatura | Emergencia | Corriente | Combustible |
+    rtn = "USB: ";
+
+    rtn += "voltage=";
+    rtn += compressArray(volts, ARRAY_SIZE);
+    rtn += ", ";
+
+    rtn += "temperature=";
+    rtn += compressArray(temps, ARRAY_SIZE);
+    rtn += ", ";
+
+    rtn += "emergency=";
+    rtn += emergency ? "1" : "0";
+    rtn += ", ";
+
+    rtn += "current=";
+    rtn += current;
+    rtn += ", ";
+
+    rtn += "gas=";
+    rtn += gas;
+}

@@ -177,6 +177,11 @@ int slashPosition = 0;
 */
 int ampersandPosition = 0;
 
+/**
+    outcomingUSB es una string que contiene el mensaje USB de salida.
+*/
+String outcomingUSB = "";
+
 
 /// Headers finales (proceden a la declaración de variables).
 
@@ -198,10 +203,11 @@ int ampersandPosition = 0;
 */
 void reserveMemory() {
     receiverStr.reserve(DEVICE_ID_MAX_SIZE);
-    incomingPayload.reserve(INCOMING_PAYLOAD_MAX_SIZE);
-    incomingFull.reserve(INCOMING_FULL_MAX_SIZE);
     currentStr.reserve(8);
     gasStr.reserve(8);
+    incomingPayload.reserve(INCOMING_PAYLOAD_MAX_SIZE);
+    incomingFull.reserve(INCOMING_FULL_MAX_SIZE);
+    outcomingUSB.reserve(100);
 
     if (!outcomingFull.reserve(MAX_SIZE_OUTCOMING_LORA_REPORT)) {
         #if DEBUG_LEVEL >= 1
@@ -225,6 +231,7 @@ void setup() {
     setupPinout();
     #if DEBUG_LEVEL >= 1
         Serial.begin(SERIAL_BPS);
+        Serial.print("Puerto serial inicializado en modo debug.");
     #endif
     reserveMemory();
     LoRaInitialize();
@@ -297,15 +304,12 @@ void loop() {
         }
     }
 
-    // Si no se presionó el botón antipánico...
-    if (!emergency) {
-        // ToDo: consultar el estado de la cabina por USB.
-        statusOutgoing = "S";
-    } else {
-        // cambia el estado de la cabina.
-        statusOutgoing = "F";
-        // iniciar alarma de emergencia.
-        startAlert(100, 10);
-        // ToDo: cambiar el estado de la cabina por USB.
-    }
+    #if DEBUG_LEVEL == 0
+        if(runEvery(sec2ms(SERIAL_REPORT_TIMEOUT), 1)) {
+            // Compone la carga útil USB.
+            composeUSBPayload(voltages, temperatures, emergency, currentBuffer, gasBuffer, outcomingUSB);
+            // Escribe la carga útil USB.
+            Serial.print(outcomingUSB);
+        }
+    #endif
 }
