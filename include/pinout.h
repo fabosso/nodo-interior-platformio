@@ -53,9 +53,9 @@ RS232 (2) - | [ ]A7              INT0/D2[ ] | - Reservado para RA-02.
 */
 
 // Pinout sensores y actuadores.
-#define TENSION_PIN A1
-#define BUZZER_PIN 9
-// #define TEMPERATURA_PIN 8
+#define TENSION_PIN A0
+#define BUZZER_PIN A1
+#define TEMPERATURA_PIN A2
 #define RELE_PIN 7
 #define PUERTA_PIN 6
 #define ANTIPANICO_PIN 5
@@ -81,9 +81,6 @@ EnergyMonitor eMon;
 void setupPinout() {
     #ifdef BUZZER_PIN
         pinMode(BUZZER_PIN, OUTPUT);
-    #endif
-    #ifdef TEMPERATURA_PIN
-        pinMode(TEMPERATURA_PIN, INPUT);
     #endif
     #ifdef RELE_PIN
         pinMode(RELE_PIN, OUTPUT);

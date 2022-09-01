@@ -243,7 +243,7 @@ void setup() {
     setupPinout();
     #if DEBUG_LEVEL >= 1
         Serial.begin(SERIAL_BPS);
-        Serial.print("Puerto serial inicializado en modo debug.");
+        Serial.println("Puerto serial inicializado en modo debug.");
     #endif
     reserveMemory();
     LoRaInitialize();
