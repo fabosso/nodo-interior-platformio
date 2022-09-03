@@ -130,7 +130,7 @@ const String knownCommands[KNOWN_COMMANDS_SIZE] = {
     - 'L': cabina en modo limitado.
     - 'F': cabina fuera de servicio.
 */
-String statusOutcoming = "";
+String statusOutcoming = "F";
 
 /**
     currentStr es una string que contiene el valor de corriente actual, antes de parsearlo a float.
@@ -241,8 +241,8 @@ void reserveMemory() {
 */
 void setup() {
     setupPinout();
+    Serial.begin(SERIAL_BPS);
     #if DEBUG_LEVEL >= 1
-        Serial.begin(SERIAL_BPS);
         Serial.println("Puerto serial inicializado en modo debug.");
     #endif
     reserveMemory();
