@@ -65,7 +65,7 @@ RS232 (2) - | [ ]A7              INT0/D2[ ] | - Reservado para RA-02.
 #define BUZZER_INACTIVO LOW
 #define RELE_ACTIVO HIGH        // definido según jumper de módulo
 #define RELE_INACTIVO LOW       // definido según jumper de módulo
-#define PRESENCIA_ACTIVO HIGH
+#define PRESENCIA_ACTIVO HIGH   // definido según conexiones N.O. y N.C.
 
 // Instanciamiento de objetos relacionados al pinout.
 EnergyMonitor eMon;

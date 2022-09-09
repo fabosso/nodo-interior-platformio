@@ -264,7 +264,7 @@ void loop() {
         stopRefreshingAllSensors();
 
         // Compone la carga útil de LoRa.
-        composeLoRaPayload(voltages, temperatures, statusOutcoming, outcomingFull);
+        composeLoRaPayload(voltages, temperatures, statusOutcoming, emergency, outcomingFull);
 
         #if DEBUG_LEVEL >= 1
             Serial.print("Payload LoRa encolado!: ");
@@ -306,6 +306,16 @@ void loop() {
         index++;
     }
 
+    if(runEvery(sec2ms(SERIAL_REPORT_TIMEOUT), 3)) {
+        // Compone la carga útil USB.
+        composeUSBPayload(voltages, temperatures, emergency, currentBuffer, gasBuffer, outcomingUSB);
+        #if DEBUG_LEVEL != 0
+            Serial.print("Payload que saldría por USB: ");
+        #endif
+        // Escribe la carga útil USB.
+        Serial.println(outcomingUSB);
+    }
+
     if (!resetAlert && !pitidosRestantes) {
         if (refreshRequested[0]) {
             // Obtiene un nuevo valor de tensión.
@@ -316,13 +326,20 @@ void loop() {
             getNewTemperature();
         }
     }
+}
 
+/*
+    serialEvent() ocurre cada vez que se recibe un dato por el puerto serie.
+    Al recibir el caracter newline, se levanta un flag.
+*/
+void serialEvent() {
     #if DEBUG_LEVEL == 0
-        if(runEvery(sec2ms(SERIAL_REPORT_TIMEOUT), 1)) {
-            // Compone la carga útil USB.
-            composeUSBPayload(voltages, temperatures, emergency, currentBuffer, gasBuffer, outcomingUSB);
-            // Escribe la carga útil USB.
-            Serial.print(outcomingUSB);
+        while (Serial.available()) {
+            char inChar = (char)Serial.read();
+            incomingUSB += inChar;
+            if (inChar == '\n') {
+                incomingUSBComplete = true;
+            }
         }
     #endif
 }

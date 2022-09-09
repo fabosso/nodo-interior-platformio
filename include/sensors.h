@@ -85,9 +85,19 @@ void getNewTemperature() {
 */
 void callbackEmergency() {
     #ifndef ANTIPANICO_MOCK
-        if (digitalRead(ANTIPANICO_PIN) == ANTIPANICO_ACTIVO) {
+        if (digitalRead(ANTIPANICO_PIN) == ANTIPANICO_ACTIVO) { 
+            #if DEBUG_LEVEL >= 3
+                if (!emergency) {
+                    Serial.println("Emergencia detectada! ");
+                }
+            #endif
             emergency = true;
         } else {
+            #if DEBUG_LEVEL >= 3
+                if (emergency) {
+                    Serial.println("Emergencia finalizada. ");
+                }
+            #endif
             emergency = false;
         }
     #else

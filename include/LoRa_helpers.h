@@ -76,19 +76,6 @@ void onReceive(int packetSize) {
     receiverStr = "";
 }
 
-/*
-    serialEvent() ocurre cada vez que se recibe un dato por el puerto serie.
-    Al recibir el caracter newline, se levanta un flag.
-*/
-void serialEvent() {
-  while (Serial.available()) {
-    char inChar = (char)Serial.read();
-    incomingUSB += inChar;
-    if (inChar == '\n') {
-        incomingUSBComplete = true;
-    }
-  }
-}
 
 /**
     LoRaInitialize() inicializa el módulo SX1278 con:
@@ -128,7 +115,7 @@ void LoRaInitialize() {
     @param status Estado de la cabina.
     @param &rtn Dirección de memoria de la String a componer.
 */
-void composeLoRaPayload(float volts[], float temps[], String status, String& rtn) {
+void composeLoRaPayload(float volts[], float temps[], String status, bool emergency, String& rtn) {
     // Payload LoRA = vector de bytes transmitidos en forma FIFO.
     // | Dev ID | Tensión | Temperatura | Status |
     rtn = "<";
@@ -151,7 +138,11 @@ void composeLoRaPayload(float volts[], float temps[], String status, String& rtn
     rtn += "&";
     rtn += "status";
     rtn += "=";
-    rtn += status;
+    if (emergency) {
+        rtn += "F";
+    } else {
+        rtn += status;
+    }
 }
 
 void composeUSBPayload(float volts[], float temps[], bool emergency, float current, float gas, String& rtn) {

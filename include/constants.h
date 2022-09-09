@@ -7,9 +7,9 @@
 */
 
 /// Comunicación serial.
-#define DEBUG_LEVEL 3            // Nivel de debug (0 inhabilita el puerto serial).
+#define DEBUG_LEVEL 0            // Nivel de debug (0 para comunicarse sólo con SIGEFA).
 #define SERIAL_BPS 9600          // Bitrate de las comunicaciones por puerto serial.
-#define SERIAL_REPORT_TIMEOUT 60 // Intervalo de tiempo entre cada reporte por puerto serial.
+#define SERIAL_REPORT_TIMEOUT 10 // Intervalo de tiempo entre cada reporte por puerto serial.
 
 /// LoRa.
 #define LORA_FREQ 433175000                                                         // Frecuencia de la transmisión LoRa (en Hz).

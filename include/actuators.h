@@ -83,7 +83,7 @@ void callbackLights() {
 void callbackStatus() {
     if (incomingUSBComplete) {
         // incomingUSB típico:
-        // USB: status=S
+        // USB: status=S\n
         equalsPosition = incomingUSB.indexOf(equalSign);
         statusOutcoming = incomingUSB.substring(equalsPosition + 1, equalsPosition + 2);
         incomingUSBComplete = false;
