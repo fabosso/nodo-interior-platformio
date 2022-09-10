@@ -7,7 +7,7 @@
 */
 
 /// Comunicación serial.
-#define DEBUG_LEVEL 0            // Nivel de debug (0 para comunicarse sólo con SIGEFA).
+#define DEBUG_LEVEL 2            // Nivel de debug (0 para comunicarse sólo con SIGEFA).
 #define SERIAL_BPS 9600          // Bitrate de las comunicaciones por puerto serial.
 #define SERIAL_REPORT_TIMEOUT 10 // Intervalo de tiempo entre cada reporte por puerto serial.
 
@@ -35,8 +35,8 @@
 #define EMON_TIMEOUT 1000 // Timeout de la rutina calcVI (en ms).
 
 // Sensor de puerta abierta.
-#define PUERTA_ACTIVA HIGH  // Señal entrante cuando la puerta está abierta.
-#define PUERTA_INACTIVA LOW // Señal entrante cuando la puerta está cerrada.
+#define PUERTA_ACTIVA LOW    // Señal entrante cuando la puerta está abierta.
+#define PUERTA_INACTIVA HIGH // Señal entrante cuando la puerta está cerrada.
 
 // Sensor de boton antipánico.
 #define ANTIPANICO_ACTIVO HIGH  // Señal entrante cuando el boton está presionado.
@@ -44,6 +44,6 @@
 
 /// Valores mock.
 // #define TENSION_MOCK 223.11      // Tensión de prueba.
-// #define TEMPERATURA_MOCK 23.11 // Temperatura de prueba.
+// #define TEMPERATURA_MOCK 23.11   // Temperatura de prueba.
 // #define ANTIPANICO_MOCK 0        // Antipánico de prueba.
 // #define PUERTA_MOCK 0            // Puerta de prueba.
