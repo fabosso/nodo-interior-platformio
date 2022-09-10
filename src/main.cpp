@@ -26,6 +26,9 @@
 // Biblioteca necesaria para reservar espacios de memoria fijos para las Strings utilizadas.
 #include <StringReserveCheck.h> // https://www.forward.com.au/pfod/ArduinoProgramming/ArduinoStrings/index.html
 
+// Biblioteca necesaria para utilizar el watchdog timer. 
+#include <avr/wdt.h>            // https://www.nongnu.org/avr-libc/user-manual/group__avr__watchdog.html
+
 /// Declaración de variables globales.
 
 /**
@@ -87,7 +90,7 @@ bool emergency = false;
     { Tensión, Temperatura }
     Una vez refrescado, cada uno de estos booleanos vuelve a ponerse en false.
 */
-bool refreshRequested[SENSORS_QTY] = {false, false};
+bool refreshRequested[SENSORS_QTY] = {false};
 
 /**
     outcomingFull es una string que contiene el mensaje LoRa de salida preformateado especialmente
@@ -235,6 +238,7 @@ void reserveMemory() {
         - inicializa el periférico serial,
         - reserva espacios de memoria para las Strings,
         - inicializa el módulo LoRa.
+        - inicializa el watchdog timer en 8 segundos.
     Si después de realizar estas tareas no se "cuelga", da inicio
     a una alerta "exitosa".
 */
@@ -254,6 +258,7 @@ void setup() {
     reserveMemory();
     LoRaInitialize();
     startAlert(133, 3);
+    wdt_enable(WDTO_8S);
 }
 
 /**
@@ -267,6 +272,7 @@ void setup() {
             - observa el estado de la puerta,
             - observa el estado del botón antipánico,
             - observa el estado del buffer USB.
+    Al finalizar el loop, resetea el watchdog timer.
     Esta función se repite hasta que se le dé un reset al programa.
 */
 void loop() {
@@ -341,6 +347,8 @@ void loop() {
     #if DEBUG_LEVEL >= 2
         scanTime();
     #endif
+
+    wdt_reset();
 }
 
 /*
