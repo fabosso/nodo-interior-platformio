@@ -87,5 +87,6 @@ void statusObserver() {
         equalsPosition = incomingUSB.indexOf(equalSign);
         statusOutcoming = incomingUSB.substring(equalsPosition + 1, equalsPosition + 2);
         incomingUSBComplete = false;
+        incomingUSB = "";
     }
 }

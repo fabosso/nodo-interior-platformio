@@ -7,7 +7,7 @@
 */
 
 /// Comunicación serial.
-#define DEBUG_LEVEL 1            // Nivel de debug (0 para comunicarse sólo con SIGEFA).
+#define DEBUG_LEVEL 0            // Nivel de debug (0 para comunicarse sólo con SIGEFA).
 #define SERIAL_BPS 9600          // Bitrate de las comunicaciones por puerto serial.
 #define SERIAL_REPORT_TIMEOUT 10 // Intervalo de tiempo entre cada reporte por puerto serial.
 

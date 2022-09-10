@@ -358,13 +358,15 @@ void loop() {
         'USB: status=S\n'
 */
 void serialEvent() {
-    #if DEBUG_LEVEL == 0
-        while (Serial.available()) {
-            char inChar = (char)Serial.read();
+    while (Serial.available()) {
+        // obtener el nuevo caracter
+        char inChar = (char)Serial.read();
+        if (inChar == '\n') {
+            // si el caracter entrante es un newline, levantar un flag
+            incomingUSBComplete = true;
+        } else {
+            // sino, appendearlo a incomingUSB
             incomingUSB += inChar;
-            if (inChar == '\n') {
-                incomingUSBComplete = true;
-            }
         }
-    #endif
+    }
 }
