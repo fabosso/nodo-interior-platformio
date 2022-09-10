@@ -243,6 +243,13 @@ void setup() {
     Serial.begin(SERIAL_BPS);
     #if DEBUG_LEVEL >= 1
         Serial.println("Puerto serial inicializado en modo debug.");
+        Serial.print("Nivel de debug = ");
+        Serial.println(DEBUG_LEVEL);
+        Serial.print("Fecha de última compilación: ");
+        Serial.print(__DATE__);
+        Serial.print(" ");
+        Serial.println(__TIME__);
+        Serial.println();
     #endif
     reserveMemory();
     LoRaInitialize();
@@ -251,8 +258,7 @@ void setup() {
 
 /**
     loop() determina las tareas que cumple el programa:
-        - cada LORA_TIMEOUT segundos, envía un payload LoRa.
-        - cada SERIAL_REPORT_TIMEOUT segundos, envía un payload USB.
+        - cada LORA_TIMEOUT segundos, envía un payload LoRa y un payload USB.
         - cada TIMEOUT_READ_SENSORS segundos, refresca el estado de todas las mediciones.
         - si corresponde, mide tensión y temperatura.
         - observa el estado actual de las variables de programa y, de ser necesario, actúa:
@@ -269,7 +275,7 @@ void loop() {
         stopRefreshingAllSensors();
 
         // Compone la carga útil de LoRa.
-        composeLoRaPayload(voltages, temperatures, statusOutcoming, emergency, outcomingFull);
+        composeLoRaPayload(voltages, temperatures, emergency, statusOutcoming, outcomingFull);
 
         #if DEBUG_LEVEL >= 1
             Serial.print("Payload LoRa encolado!: ");
@@ -287,6 +293,16 @@ void loop() {
         // Inicia la alerta preestablecida.
         startAlert(133, 3);
 
+        // Compone la carga útil USB.
+        composeUSBPayload(voltages, temperatures, emergency, currentBuffer, gasBuffer, outcomingUSB);
+        #if DEBUG_LEVEL > 0
+            Serial.print("Payload que saldría por USB: ");
+        #endif
+        #if DEBUG_LEVEL >= 0
+            // Escribe la carga útil USB.
+            Serial.println(outcomingUSB);
+        #endif
+
         // Reestablece los arrays de medición.
         cleanupArray(voltages, ARRAY_SIZE);
         cleanupArray(temperatures, ARRAY_SIZE);
@@ -294,16 +310,6 @@ void loop() {
         // Reestablece el index de los arrays de medición.
         index = 0;
 
-    }
-
-    if(runEvery(sec2ms(SERIAL_REPORT_TIMEOUT), 2)) {
-        // Compone la carga útil USB.
-        composeUSBPayload(voltages, temperatures, emergency, currentBuffer, gasBuffer, outcomingUSB);
-        #if DEBUG_LEVEL != 0
-            Serial.print("Payload que saldría por USB: ");
-        #endif
-        // Escribe la carga útil USB.
-        Serial.println(outcomingUSB);
     }
 
     if(runEvery(sec2ms(TIMEOUT_READ_SENSORS), 3)) {
@@ -331,6 +337,10 @@ void loop() {
     doorObserver();
     emergencyObserver();
     statusObserver();
+
+    #if DEBUG_LEVEL >= 2
+        scanTime();
+    #endif
 }
 
 /*

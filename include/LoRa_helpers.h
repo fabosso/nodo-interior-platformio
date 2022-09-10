@@ -115,7 +115,7 @@ void LoRaInitialize() {
     @param status Estado de la cabina.
     @param &rtn Dirección de memoria de la String a componer.
 */
-void composeLoRaPayload(float volts[], float temps[], String status, bool emergency, String& rtn) {
+void composeLoRaPayload(float volts[], float temps[], bool emergency, String status, String& rtn) {
     // Payload LoRA = vector de bytes transmitidos en forma FIFO.
     // | Dev ID | Tensión | Temperatura | Status |
     rtn = "<";

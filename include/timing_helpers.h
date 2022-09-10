@@ -59,3 +59,19 @@ boolean runEvery(unsigned long interval, int slot) {
 unsigned long sec2ms(int seconds) {
     return ((unsigned long)seconds) * 1000;
 }
+
+void scanTime() {
+    static unsigned long previousMillis = 0;
+    unsigned long currentMillis = millis();
+    static unsigned long longestInterval = 0;
+
+    if (currentMillis - previousMillis > longestInterval /*&& previousMillis != 0*/) {
+        longestInterval = currentMillis - previousMillis;
+        Serial.print("** New scan time: ");
+        Serial.print(longestInterval);
+        Serial.println(" ms **");
+    }
+
+    previousMillis = currentMillis;
+
+}

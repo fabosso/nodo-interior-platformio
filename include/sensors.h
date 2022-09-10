@@ -15,7 +15,7 @@ void refreshAllSensors() {
     for (int i = 0; i < SENSORS_QTY; i++) {
         refreshRequested[i] = true;
     }
-    #if DEBUG_LEVEL >= 2
+    #if DEBUG_LEVEL >= 4
         Serial.println("Refrescando sensores!");
     #endif
 }
@@ -29,7 +29,7 @@ void stopRefreshingAllSensors() {
     for (int i = 0; i < SENSORS_QTY; i++) {
         refreshRequested[i] = false;
     }
-    #if DEBUG_LEVEL >= 2
+    #if DEBUG_LEVEL >= 4
         Serial.println("Abandonando refrescos!");
     #endif
 }
