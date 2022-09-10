@@ -80,10 +80,10 @@ void getNewTemperature() {
 }
 
 /**
-    callbackEmergency() se encarga de pollear el estado del pin del botón antipánico,
-    almacenando el valor en emergency
+    emergencyObserver() se encarga de pollear el estado del pin del botón antipánico,
+    almacenando el valor en un flag, emergency.
 */
-void callbackEmergency() {
+void emergencyObserver() {
     #ifndef ANTIPANICO_MOCK
         if (digitalRead(ANTIPANICO_PIN) == ANTIPANICO_ACTIVO) { 
             #if DEBUG_LEVEL >= 3
@@ -106,15 +106,25 @@ void callbackEmergency() {
 }
 
 /**
-    callbackPuerta() se encarga de pollear el estado del pin del sensor de puerta,
-    almacenando el valor en doorOpen.
+    doorObserver() se encarga de pollear el estado del pin del 
+    sensor de puerta, almacenando ese valor en un flag, doorOpen.
 */
-void callbackPuerta() {
+void doorObserver() {
     #ifndef PUERTA_MOCK
         if (digitalRead(PUERTA_PIN) == PUERTA_ACTIVA) {
-            doorOpen = true;
+            if (!doorOpen) {
+                doorOpen = true;
+                #if DEBUG_LEVEL >= 2 
+                    Serial.println("Se ha abierto la puerta!");
+                #endif
+            }
         } else {
-            doorOpen = false;
+            if (doorOpen) {
+                doorOpen = false;
+                #if DEBUG_LEVEL >= 2 
+                    Serial.println("Se ha cerrado la puerta!");
+                #endif
+            }
         }
     #else
         doorOpen = PUERTA_MOCK;

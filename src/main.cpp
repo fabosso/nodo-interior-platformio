@@ -50,7 +50,6 @@ float temperatures[ARRAY_SIZE] = {0.0};
 */
 float currentBuffer = 0.0;
 
-
 /**
     gasBuffer es un float que contiene el último valor de nivel de combustible reportado por el
     nodo exterior emparejado a este nodo.
@@ -189,7 +188,7 @@ String incomingUSB = "";
 
 /**
     incomingUSBComplete es un flag que se pone en true cuando 
-    se recibe un '\n' en el mensaje USB de entrada.
+    se recibe un newline en el mensaje USB de entrada.
 */
 bool incomingUSBComplete = false;
 
@@ -210,7 +209,7 @@ bool incomingUSBComplete = false;
 /**
     reserveMemory() reserva memoria para las Strings.
     En caso de quedarse sin memoria, alerta por puerto serial
-    e inicia una alerta de falla
+    e inicia una alerta de falla.
 */
 void reserveMemory() {
     receiverStr.reserve(DEVICE_ID_MAX_SIZE);
@@ -253,9 +252,15 @@ void setup() {
 /**
     loop() determina las tareas que cumple el programa:
         - cada LORA_TIMEOUT segundos, envía un payload LoRa.
-        - si no está ocupado con eso:
-            - se ocupa de disparar las alertas preestablecidas.
-            - cada 2 segundos, refresca el estado de los sensores.
+        - cada SERIAL_REPORT_TIMEOUT segundos, envía un payload USB.
+        - cada TIMEOUT_READ_SENSORS segundos, refresca el estado de todas las mediciones.
+        - si corresponde, mide tensión y temperatura.
+        - observa el estado actual de las variables de programa y, de ser necesario, actúa:
+            - emite las alertas que sean necesarias,
+            - ejecuta comandos entrantes de LoRa,
+            - observa el estado de la puerta,
+            - observa el estado del botón antipánico,
+            - observa el estado del buffer USB.
     Esta función se repite hasta que se le dé un reset al programa.
 */
 void loop() {
@@ -291,22 +296,7 @@ void loop() {
 
     }
 
-    callbackAlert();
-    callbackLoRaCommand();
-    callbackPuerta();
-    callbackEmergency();
-    callbackStatus();
-
-    if(runEvery(sec2ms(TIMEOUT_READ_SENSORS), 2)) {
-        // Refresca TODOS los sensores.
-        refreshAllSensors();
-        // Actualiza el estado de las luces.
-        callbackLights();
-        // Avanza en 1 a los índices de los arrays de medición.
-        index++;
-    }
-
-    if(runEvery(sec2ms(SERIAL_REPORT_TIMEOUT), 3)) {
+    if(runEvery(sec2ms(SERIAL_REPORT_TIMEOUT), 2)) {
         // Compone la carga útil USB.
         composeUSBPayload(voltages, temperatures, emergency, currentBuffer, gasBuffer, outcomingUSB);
         #if DEBUG_LEVEL != 0
@@ -314,6 +304,15 @@ void loop() {
         #endif
         // Escribe la carga útil USB.
         Serial.println(outcomingUSB);
+    }
+
+    if(runEvery(sec2ms(TIMEOUT_READ_SENSORS), 3)) {
+        // Refresca TODOS los sensores.
+        refreshAllSensors();
+        // Actualiza el estado de las luces.
+        lightsObserver();
+        // Avanza en 1 a los índices de los arrays de medición.
+        index++;
     }
 
     if (!resetAlert && !pitidosRestantes) {
@@ -326,11 +325,19 @@ void loop() {
             getNewTemperature();
         }
     }
+
+    alertObserver();
+    LoRaCmdObserver();
+    doorObserver();
+    emergencyObserver();
+    statusObserver();
 }
 
 /*
-    serialEvent() ocurre cada vez que se recibe un dato por el puerto serie.
-    Al recibir el caracter newline, se levanta un flag.
+    serialEvent() es la respuesta a la interrupción por puerto serie.
+    Al recibir el caracter newline (\n), se levanta un flag, incomingUSBComplete.
+    incomingUSB típico:
+        'USB: status=S\n'
 */
 void serialEvent() {
     #if DEBUG_LEVEL == 0

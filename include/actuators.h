@@ -7,13 +7,13 @@
 */
 
 /**
-    callbackAlert() se encarga de consultar el estado de la variable resetAlert:
+    alertObserver() se encarga de observar el estado de la variable resetAlert:
     si existe un pedido de iniciar la alerta, actualiza pitidosRestantes
     en base a totalPitidos (configurado por startAlert()) y baja el flag de pedido.
     Luego, si existen pedidos restantes, los realiza en base a tiempoPitido (configurado
     por startAlert()).
 */
-void callbackAlert() {
+void alertObserver() {
     if (resetAlert && pitidosRestantes == 0) {
         pitidosRestantes = totalPitidos;
         resetAlert = false;
@@ -29,12 +29,12 @@ void callbackAlert() {
 }
 
 /**
-    callbackLoRaCommand() se encarga de consultar el estado de la variable incomingPayload.
+    LoRaCmdObserver() se encarga de observar el estado de la variable incomingPayload.
     Si la variable está vacía, sale de la función.
     Si el comando existe dentro del array de comandos conocidos, ejecuta cierta acción.
     Incluso si no existiera, limpia incomingPayload.
 */
-void callbackLoRaCommand() {
+void LoRaCmdObserver() {
     if (incomingPayload == "") {
         return;
     } else {
@@ -59,11 +59,11 @@ void callbackLoRaCommand() {
 }
 
 /**
-    callbackLights() se encarga de chequear el estado de dos flags: dayTime y doorOpen.
+    lightsObserver() se encarga de observar el estado de dos flags: dayTime y doorOpen.
     Si es de día, saltea el resto de la función (porque el relé estará siempre en modo activo).
     Si es de noche y la puerta está abierta, desactiva el relé. Si no, lo activa.
 */
-void callbackLights() {
+void lightsObserver() {
     if (dayTime) {
         digitalWrite(RELE_PIN, RELE_ACTIVO);
     } else {
@@ -76,14 +76,14 @@ void callbackLights() {
 }
 
 /**
-    callbackStatus() se encarga de parsear solo el caracter útil de la string de entrada
+    statusObserver() se encarga de parsear solo el caracter útil de la string de entrada
     del USB, y almacenar en statusOutcoming el estado actual de la cabina reportada
     por el proyecto SIGEFA.
 */
-void callbackStatus() {
+void statusObserver() {
     if (incomingUSBComplete) {
         // incomingUSB típico:
-        // USB: status=S\n
+        // 'USB: status=S\n'
         equalsPosition = incomingUSB.indexOf(equalSign);
         statusOutcoming = incomingUSB.substring(equalsPosition + 1, equalsPosition + 2);
         incomingUSBComplete = false;
