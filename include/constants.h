@@ -35,8 +35,8 @@
 #define EMON_TIMEOUT 1000 // Timeout de la rutina calcVI (en ms).
 
 // Sensor de puerta abierta.
-#define PUERTA_ACTIVA HIGH  // Señal entrante cuando la puerta está abierta.
-#define PUERTA_INACTIVA LOW // Señal entrante cuando la puerta está cerrada.
+#define PUERTA_ACTIVA LOW    // Señal entrante cuando la puerta está abierta.
+#define PUERTA_INACTIVA HIGH // Señal entrante cuando la puerta está cerrada.
 
 // Sensor de boton antipánico.
 #define ANTIPANICO_ACTIVO HIGH  // Señal entrante cuando el boton está presionado.
