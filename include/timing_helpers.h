@@ -60,6 +60,11 @@ unsigned long sec2ms(int seconds) {
     return ((unsigned long)seconds) * 1000;
 }
 
+/*
+    scanTime() se encarga de medir el tiempo de scan, es decir,
+    el tiempo que le toma recorrer un loop() entero, y de imprimirlo
+    por pantalla en caso que se "bata" un nuevo récord.
+*/
 void scanTime() {
     static unsigned long previousMillis = 0;
     unsigned long currentMillis = millis();
@@ -73,5 +78,4 @@ void scanTime() {
     }
 
     previousMillis = currentMillis;
-
 }
