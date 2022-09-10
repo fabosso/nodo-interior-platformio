@@ -7,7 +7,7 @@
 */
 
 /// Comunicación serial.
-#define DEBUG_LEVEL 0            // Nivel de debug (0 para comunicarse sólo con SIGEFA).
+#define DEBUG_LEVEL 2            // Nivel de debug (0 para comunicarse sólo con SIGEFA).
 #define SERIAL_BPS 9600          // Bitrate de las comunicaciones por puerto serial.
 #define SERIAL_REPORT_TIMEOUT 10 // Intervalo de tiempo entre cada reporte por puerto serial.
 
@@ -44,6 +44,6 @@
 
 /// Valores mock.
 // #define TENSION_MOCK 223.11      // Tensión de prueba.
-// #define TEMPERATURA_MOCK 23.11 // Temperatura de prueba.
+// #define TEMPERATURA_MOCK 23.11   // Temperatura de prueba.
 // #define ANTIPANICO_MOCK 0        // Antipánico de prueba.
 // #define PUERTA_MOCK 0            // Puerta de prueba.

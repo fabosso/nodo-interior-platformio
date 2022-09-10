@@ -86,7 +86,7 @@ void setupPinout() {
         pinMode(RELE_PIN, OUTPUT);
     #endif
     #ifdef PUERTA_PIN
-        pinMode(PUERTA_PIN, INPUT);
+        pinMode(PUERTA_PIN, INPUT_PULLUP);
     #endif
     #ifdef ANTIPANICO_PIN
         pinMode(ANTIPANICO_PIN, INPUT);
