@@ -237,7 +237,7 @@ void reserveMemory() {
         - setea el pinout,
         - inicializa el periférico serial,
         - reserva espacios de memoria para las Strings,
-        - inicializa el módulo LoRa.
+        - inicializa el módulo LoRa,
         - inicializa el watchdog timer en 8 segundos.
     Si después de realizar estas tareas no se "cuelga", da inicio
     a una alerta "exitosa".
