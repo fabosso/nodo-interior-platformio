@@ -104,6 +104,8 @@ String outcomingFull;
 */
 String incomingFull;
 
+bool incomingFullComplete = false;
+
 /**
     receiverStr es una string que sólo contiene el identificador de nodo
     recibido en un mensaje LoRa entrante.
@@ -339,12 +341,13 @@ void loop() {
     }
 
     alertObserver();
+    downlinkObserver();
     LoRaCmdObserver();
     doorObserver();
     emergencyObserver();
     statusObserver();
 
-    #if DEBUG_LEVEL >= 2
+    #if DEBUG_LEVEL >= 3
         scanTime();
     #endif
 
