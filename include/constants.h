@@ -17,7 +17,7 @@
 #define EXTERIOR_ID (DEVICE_ID + 10000)                                             // Identificador del nodo exterior.
 #define BROADCAST_ID (DEVICE_ID - DEVICE_ID % 10000 + 9999)                         // ID broadcast para este tipo de nodo.
 #define DEVICE_ID_MAX_SIZE 6                                                        // Tamaño máximo que se espera para cada DEVICE_ID entrante.
-#define INCOMING_PAYLOAD_MAX_SIZE 50                                                // Tamaño máximo esperado del payload LoRa entrante.
+#define INCOMING_PAYLOAD_MAX_SIZE 100                                                // Tamaño máximo esperado del payload LoRa entrante.
 #define INCOMING_FULL_MAX_SIZE (INCOMING_PAYLOAD_MAX_SIZE + DEVICE_ID_MAX_SIZE + 2) // Tamaño máximo esperado del mensaje entrante.
 #define MAX_SIZE_OUTCOMING_LORA_REPORT 200                                          // Tamaño máximo esperado del payload LoRa saliente.
 #define KNOWN_COMMANDS_SIZE 3                                                       // Cantidad de comandos LoRa conocidos.
