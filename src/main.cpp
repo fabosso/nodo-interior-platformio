@@ -104,6 +104,11 @@ String outcomingFull;
 */
 String incomingFull;
 
+/**
+    incomingFullComplete es un flag que se pone en true luego de completarse la función de interrupción
+    onRecieve de LoRa, provisto que la carga útil sea una string con entre 0 y INCOMING_FULL_MAX_SIZE 
+    bytes.  
+*/
 bool incomingFullComplete = false;
 
 /**

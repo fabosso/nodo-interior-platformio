@@ -73,7 +73,7 @@ void downlinkObserver() {
             #endif
         }
 
-        // Limpiar strings.
+        // Limpiar variables.
         incomingFullComplete = false;
         incomingFull = "";
         receiverStr = "";

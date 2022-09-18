@@ -46,9 +46,9 @@ RS232 (2) - | [ ]A7              INT0/D2[ ] | - Reservado para RA-02.
 /*
     Sensores y actuadores del nodo interior:
         - Puerto RS232 (1):
-            - Sensor de tensión = A1.
-            - Sensor de temperatura = D8.
-            - Actuador buzzer (y LED) = D9.
+            - Sensor de tensión = A0.
+            - Sensor de temperatura = A2.
+            - Actuador buzzer (y LED) = A1.
             - Actuador iluminación cabina = D7.
 */
 
