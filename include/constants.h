@@ -24,6 +24,10 @@
 #define LORA_TIMEOUT 20                                                             // Tiempo entre cada mensaje LoRa.
 #define LORA_SYNC_WORD 0x34                                                         // Palabra de sincronización LoRa.
 
+/// Watchdog.
+#define USE_WATCHDOG_TMR TRUE
+#define WATCHDOG_TMR 8
+
 /// Arrays.
 #define SENSORS_QTY 2          // Cantidad de sensores conectados.
 #define TIMEOUT_READ_SENSORS 2 // Tiempo entre mediciones.
