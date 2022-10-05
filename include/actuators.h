@@ -46,7 +46,6 @@ void LoRaCmdObserver() {
             startAlert(750, 10);
         } else if (incomingPayload == knownCommands[1]) {   // knownCommands[1]: dayttime
             dayTime = true;
-            digitalWrite(RELE_PIN, RELE_ACTIVO);
         } else if (incomingPayload == knownCommands[2]) {   // knownCommands[2]: nighttime
             dayTime = false;
         } else {
@@ -60,17 +59,17 @@ void LoRaCmdObserver() {
 
 /**
     lightsObserver() se encarga de observar el estado de dos flags: dayTime y doorOpen.
-    Si es de día, saltea el resto de la función (porque el relé estará siempre en modo activo).
-    Si es de noche y la puerta está abierta, desactiva el relé. Si no, lo activa.
+    Si es de día, enciende la luz.
+    Si es de noche y la puerta está abierta, apaga la luz. Si no, la enciende.
 */
 void lightsObserver() {
     if (dayTime) {
-        digitalWrite(RELE_PIN, RELE_ACTIVO);
+        digitalWrite(RELE_PIN, LUZ_ENCENDIDA);
     } else {
         if (doorOpen) {
-            digitalWrite(RELE_PIN, RELE_INACTIVO);
+            digitalWrite(RELE_PIN, LUZ_APAGADA);
         } else {
-            digitalWrite(RELE_PIN, RELE_ACTIVO);
+            digitalWrite(RELE_PIN, LUZ_ENCENDIDA);
         }
     }
 }
