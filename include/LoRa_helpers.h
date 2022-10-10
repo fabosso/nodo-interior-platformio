@@ -44,6 +44,10 @@ void downlinkObserver() {
         // Si el ID del receptor coincide con nuestro ID o si es un broadcast:
         if (receiverID == DEVICE_ID || receiverID == BROADCAST_ID) {
             // Obtiene el payload entrante.
+            // incomingFull típico del uplink LoRa:
+            // <10009>daytime 
+            // incomingPayload pasaría a ser:
+            // daytime
             incomingPayload = incomingFull.substring(delimiter + 1);
             #if DEBUG_LEVEL >= 2
                 Serial.println("ID coincide!");
