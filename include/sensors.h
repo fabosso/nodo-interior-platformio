@@ -111,7 +111,7 @@ void emergencyObserver() {
 */
 void doorObserver() {
     #ifndef PUERTA_MOCK
-        if (digitalRead(PUERTA_PIN) == PUERTA_ACTIVA) {
+        if (digitalRead(PUERTA_PIN) == PUERTA_ABIERTA) {
             if (!doorOpen) {
                 doorOpen = true;
                 #if DEBUG_LEVEL >= 2 

@@ -60,20 +60,6 @@ RS232 (2) - | [ ]A7              INT0/D2[ ] | - Reservado para RA-02.
 #define PUERTA_PIN 6
 #define ANTIPANICO_PIN 5
 
-// Definición de modo de trabajo.
-#define BUZZER_ACTIVO HIGH
-#define BUZZER_INACTIVO LOW
-#define RELE_ACTIVO LOW             // definido según jumper de módulo
-#define RELE_MODO NORMALLY_CLOSED   // definido según conexión al relé
-#if (RELE_ACTIVO == LOW && RELE_MODO == NORMALLY_CLOSED) || (RELE_ACTIVO == HIGH && RELE_MODO == NORMALLY_OPEN)
-    #define LUZ_ENCENDIDA HIGH
-    #define LUZ_APAGADA LOW
-#else
-    #define LUZ_ENCENDIDA LOW
-    #define LUZ_APAGADA HIGH
-#endif
-#define PRESENCIA_ACTIVO HIGH   // definido según conexiones N.O. y N.C.
-
 // Instanciamiento de objetos relacionados al pinout.
 EnergyMonitor eMon;
 #ifdef TEMPERATURA_PIN

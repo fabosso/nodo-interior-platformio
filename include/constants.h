@@ -39,12 +39,27 @@
 #define EMON_TIMEOUT 1000 // Timeout de la rutina calcVI (en ms).
 
 // Sensor de puerta abierta.
-#define PUERTA_ACTIVA LOW    // Señal entrante cuando la puerta está abierta.
-#define PUERTA_INACTIVA HIGH // Señal entrante cuando la puerta está cerrada.
+#define PUERTA_ABIERTA LOW    // Señal entrante cuando la puerta está abierta.
+#define PUERTA_CERRADA HIGH // Señal entrante cuando la puerta está cerrada.
 
 // Sensor de botón antipánico.
-#define ANTIPANICO_ACTIVO HIGH  // Señal entrante cuando el botón está presionado.
-#define ANTIPANICO_INACTIVO LOW // Señal entrante cuando el botón no está presionado.
+#define ANTIPANICO_ACTIVO LOW  // Señal entrante cuando el botón está presionado.
+#define ANTIPANICO_INACTIVO HIGH // Señal entrante cuando el botón no está presionado.
+
+// Actuador relé.
+#define RELE_ACTIVO LOW             // definido según jumper de módulo
+#define RELE_MODO NORMALLY_CLOSED   // definido según conexión al relé
+#if (RELE_ACTIVO == LOW && RELE_MODO == NORMALLY_CLOSED) || (RELE_ACTIVO == HIGH && RELE_MODO == NORMALLY_OPEN)
+    #define LUZ_ENCENDIDA HIGH
+    #define LUZ_APAGADA LOW
+#else
+    #define LUZ_ENCENDIDA LOW
+    #define LUZ_APAGADA HIGH
+#endif
+
+// Actuador buzzer.
+#define BUZZER_ACTIVO HIGH
+#define BUZZER_INACTIVO LOW
 
 /// Valores mock.
 // #define TENSION_MOCK 223.11      // Tensión de prueba.
