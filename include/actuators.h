@@ -84,6 +84,7 @@ void lightsObserver() {
 void usbObserver() {
     if (incomingUSBComplete) {
         equalsPosition = incomingUSB.indexOf(equalSign);
+        // ToDo: check this piece of logic
         incomingUSBType = incomingUSB.substring(6, equalsPosition);
         if (incomingUSBType == "status") {
             // incomingUSB típico:
