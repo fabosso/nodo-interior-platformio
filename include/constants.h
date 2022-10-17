@@ -50,11 +50,11 @@
 #define RELE_ACTIVO LOW           // definido según jumper de módulo
 #define RELE_MODO NORMALLY_CLOSED // definido según conexión al relé
 #if (RELE_ACTIVO == LOW && RELE_MODO == NORMALLY_CLOSED) || (RELE_ACTIVO == HIGH && RELE_MODO == NORMALLY_OPEN)
-#define LUZ_ENCENDIDA HIGH
-#define LUZ_APAGADA LOW
+    #define LUZ_ENCENDIDA HIGH
+    #define LUZ_APAGADA LOW
 #else
-#define LUZ_ENCENDIDA LOW
-#define LUZ_APAGADA HIGH
+    #define LUZ_ENCENDIDA LOW
+    #define LUZ_APAGADA HIGH
 #endif
 
 // Actuador buzzer.
