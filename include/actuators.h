@@ -84,12 +84,11 @@ void lightsObserver() {
 void usbObserver() {
     if (incomingUSBComplete) {
         equalsPosition = incomingUSB.indexOf(equalSign);
-        // ToDo: check this piece of logic
-        incomingUSBType = incomingUSB.substring(6, equalsPosition);
+        incomingUSBType = incomingUSB.substring(5, equalsPosition);
         if (incomingUSBType == "status") {
             // incomingUSB típico:
             // 'USB: status=S\n'
-            // en este caso, equalsPosition sería 12
+            // en este caso, equalsPosition sería 11
             statusOutcoming = incomingUSB.substring(equalsPosition + 1, equalsPosition + 2);
         } else {
             // incomingUSB típico:
@@ -101,7 +100,7 @@ void usbObserver() {
                 outcomingFull += "***";
             #endif
             outcomingFull += ">";
-            outcomingFull += incomingUSB.substring(6);
+            outcomingFull += incomingUSB.substring(5);
             outcomingMM = true;
         }
         incomingUSBComplete = false;
