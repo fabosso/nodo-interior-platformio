@@ -75,16 +75,34 @@ void lightsObserver() {
 }
 
 /**
-    statusObserver() se encarga de parsear solo el caracter útil de la string de entrada
-    del USB, y almacenar en statusOutcoming el estado actual de la cabina reportada
-    por el proyecto SIGEFA.
+    usbObserver() se encarga, primero, de diferenciar el tipo de dato entrante por USB
+    (sea un reporte de sensores o un mensaje militar).
+        - si es un reporte de sensores, actualiza la variable statusOutcoming a 'S', 'L' o 'F'
+        - si es un mensaje militar, levanta un flag que indica que la siguiente transmisión que se
+        haga por LoRa sea de tipo mensaje militar, y prepara la string para que se envíe por LoRa.
 */
-void statusObserver() {
+void usbObserver() {
     if (incomingUSBComplete) {
-        // incomingUSB típico:
-        // 'USB: status=S\n'
         equalsPosition = incomingUSB.indexOf(equalSign);
-        statusOutcoming = incomingUSB.substring(equalsPosition + 1, equalsPosition + 2);
+        incomingUSBType = incomingUSB.substring(6, equalsPosition);
+        if (incomingUSBType == "status") {
+            // incomingUSB típico:
+            // 'USB: status=S\n'
+            // en este caso, equalsPosition sería 12
+            statusOutcoming = incomingUSB.substring(equalsPosition + 1, equalsPosition + 2);
+        } else {
+            // incomingUSB típico:
+            // 'USB: nro=13&o=2&d=3&cl=1&p=1&ci=0&e=1&m=xxx'
+            outcomingFull = "<";
+            #ifdef DEVICE_ID
+                outcomingFull += ((int)DEVICE_ID);
+            #else
+                outcomingFull += "***";
+            #endif
+            outcomingFull += ">";
+            outcomingFull += incomingUSB.substring(6);
+            outcomingMM = true;
+        }
         incomingUSBComplete = false;
         incomingUSB = "";
     }

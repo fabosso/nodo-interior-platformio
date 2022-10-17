@@ -197,10 +197,22 @@ String outcomingUSB = "";
 String incomingUSB = "";
 
 /**
-    incomingUSBComplete es un flag que se pone en true cuando 
-    se recibe un newline en el mensaje USB de entrada.
+    incomingUSBType es una string que contiene el prefijo del primer campo enviado por USB al
+    nodo, y puede ser "status" o "nro_mm".
+*/
+String incomingUSBType = "";
+
+/**
+    incomingUSBComplete es un flag que se pone en true cuando se recibe un newline en el 
+    mensaje USB de entrada.
 */
 bool incomingUSBComplete = false;
+
+/**
+    outcomingMM es un flag que se pone en true en caso de que el siguiente mensaje a ser
+    transmitido por LoRa sea un mensaje militar.
+ */
+bool outcomingMM = false;
 
 
 /// Headers finales (proceden a la declaración de variables).
@@ -226,6 +238,7 @@ void reserveMemory() {
     currentStr.reserve(8);
     gasStr.reserve(8);
     incomingUSB.reserve(20);
+    incomingUSBType.reserve(10);
     incomingPayload.reserve(INCOMING_PAYLOAD_MAX_SIZE);
     incomingFull.reserve(INCOMING_FULL_MAX_SIZE);
     outcomingUSB.reserve(100);
@@ -297,8 +310,11 @@ void loop() {
         // Deja de refrescar TODOS los sensores.
         stopRefreshingAllSensors();
 
-        // Compone la carga útil de LoRa.
-        composeLoRaPayload(voltages, temperatures, emergency, statusOutcoming, outcomingFull);
+        // Compone la carga útil de LoRa (en caso de que se vaya a reportar el estado de los 
+        // sensores, y no haya mensajes militares a emitir).
+        if (!outcomingMM) {
+            composeLoRaPayload(voltages, temperatures, emergency, statusOutcoming, outcomingFull);
+        }
 
         #if DEBUG_LEVEL >= 1
             Serial.print("Payload LoRa encolado!: ");
@@ -333,6 +349,8 @@ void loop() {
         // Reestablece el index de los arrays de medición.
         index = 0;
 
+        // Baja el flag de mensaje militar.
+        outcomingMM = false;
     }
 
     if(runEvery(sec2ms(TIMEOUT_READ_SENSORS), 3)) {
@@ -360,7 +378,7 @@ void loop() {
     LoRaCmdObserver();
     doorObserver();
     emergencyObserver();
-    statusObserver();
+    usbObserver();
 
     #if DEBUG_LEVEL >= 3
         scanTime();
