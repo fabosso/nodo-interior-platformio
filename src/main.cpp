@@ -386,7 +386,9 @@ void loop() {
         scanTime();
     #endif
 
-    wdt_reset();
+    #if USE_WATCHDOG_TMR == TRUE 
+        wdt_reset();
+    #endif
 }
 
 /*
