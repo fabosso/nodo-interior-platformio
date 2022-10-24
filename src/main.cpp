@@ -266,6 +266,8 @@ void setup() {
     setupPinout();
     Serial.begin(SERIAL_BPS);
     #if DEBUG_LEVEL >= 1
+        Serial.println("Nodo interior")
+        Serial.println("");
         Serial.println("Puerto serial inicializado en modo debug.");
         Serial.print("Nivel de debug = ");
         Serial.println(DEBUG_LEVEL);
@@ -278,7 +280,7 @@ void setup() {
     reserveMemory();
     LoRaInitialize();
     startAlert(133, 3);
-    #if USE_WATCHDOG_TMR 
+    #if USE_WATCHDOG_TMR == TRUE
         #if WATCHDOG_TMR >= 8 
             wdt_enable(WDTO_8S);
         #elif WATCHDOG_TMR >= 4
