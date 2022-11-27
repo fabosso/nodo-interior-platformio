@@ -15,25 +15,23 @@
             | [ ]D13/SCK        MISO/D12[ ] | - Reservado para RA-02.
             | [ ]3.3V           MOSI/D11[ ]~| - Reservado para RA-02.
             | [ ]V.ref     ___    SS/D10[ ]~| - Reservado para RA-02.
-RS232 (1) - | [ ]A0       / N \       D9[ ]~| - RS232 (1).
-RS232 (1) - | [ ]A1      /  A  \      D8[ ] | - RS232 (1).
-RS232 (1) - | [ ]A2      \  N  /      D7[ ] | - RS232 (1).
-RS232 (2) - | [ ]A3       \_0_/       D6[ ]~| - Cable USB / SparkON.
-RS232 (2) - | [ ]A4/SDA               D5[ ]~| - Cable USB / SparkON.
-RS232 (2) - | [ ]A5/SCL               D4[ ] | - Reservado para RA-02.
-RS232 (2) - | [ ]A6              INT1/D3[ ]~| - Reservado para RA-02.
-RS232 (2) - | [ ]A7              INT0/D2[ ] | - Reservado para RA-02.
+  DB9 (1) - | [ ]A0       / N \       D9[ ]~| - DB9 (1).
+  DB9 (1) - | [ ]A1      /  A  \      D8[ ] | - DB9 (1).
+  DB9 (1) - | [ ]A2      \  N  /      D7[ ] | - DB9 (1).
+  DB9 (2) - | [ ]A3       \_0_/       D6[ ]~| - Cable USB / SparkON.
+  DB9 (2) - | [ ]A4/SDA               D5[ ]~| - Cable USB / SparkON.
+  DB9 (2) - | [ ]A5/SCL               D4[ ] | - Reservado para RA-02.
+  DB9 (2) - | [ ]A6              INT1/D3[ ]~| - Reservado para RA-02.
+  DB9 (2) - | [ ]A7              INT0/D2[ ] | - Reservado para RA-02.
             | [ ]5V                  GND[ ] |
             | [ ]RST                 RST[ ] |
-            | [ ]GND   5V MOSI GND   TX1[ ] |  - RS232 (2).
-            | [ ]Vin   [ ] [ ] [ ]   RX1[ ] |  - RS232 (2).
+            | [ ]GND   5V MOSI GND   TX1[ ] |  - DB9 (2).
+            | [ ]Vin   [ ] [ ] [ ]   RX1[ ] |  - DB9 (2).
             |          [ ] [ ] [ ]          |
             |          MISO SCK RST         |
             |                               |
             +-------------------------------+
 */
-
-// Nota: el nodo exterior utiliza el bootloader antiguo, mientras que el nodo interior utiliza el bootloader nuevo.
 
 // Pinout RA-02.
 #define NSS_PIN 10
@@ -63,8 +61,8 @@ RS232 (2) - | [ ]A7              INT0/D2[ ] | - Reservado para RA-02.
 // Instanciamiento de objetos relacionados al pinout.
 EnergyMonitor eMon;
 #ifdef TEMPERATURA_PIN
-    OneWire oneWireObjeto(TEMPERATURA_PIN);
-    DallasTemperature sensorDS18B20(&oneWireObjeto);
+    OneWire oneWire(TEMPERATURA_PIN);
+    DallasTemperature sensorDS18B20(&oneWire);
 #endif
 
 /**
@@ -91,5 +89,5 @@ void setupPinout() {
     #ifdef TEMPERATURA_PIN
         sensorDS18B20.begin();
     #endif
-    eMon.voltage(TENSION_PIN, 226.0, 1.7);
+    eMon.voltage(TENSION_PIN, EMON_VOLTAGE_CAL, EMON_PHASE_CAL);
 }

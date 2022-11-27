@@ -35,6 +35,8 @@
 #define TIMING_SLOTS 4 // Cantidad de slots necesarios de timing (ver timing_helpers.h)
 
 // Sensor de tensión.
+#define EMON_VOLTAGE_CAL 226.0
+#define EMON_PHASE_CAL 1.7
 #define EMON_CROSSINGS 20 // Cantidad de semi-ondas muestreadas para medir tensión y/o corriente.
 #define EMON_TIMEOUT 1000 // Timeout de la rutina calcVI (en ms).
 
